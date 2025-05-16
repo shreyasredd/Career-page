@@ -5,17 +5,17 @@ import { Card, CardContent } from './ui/card';
 const testimonials = [
   {
     quote: "Working here has been a career-defining experience. The support from mentors and opportunities to lead projects have helped me grow tremendously.",
-    name: "Priya S.",
+    name: "Arjun.",
     title: "Data Scientist"
   },
   {
     quote: "It's the people that make the difference. I feel valued, challenged, and empowered every single day.",
-    name: "Rohit M.",
-    title: "Front-End Developer"
+    name: "Shreyas.",
+    title: "Business Analyst"
   },
   {
     quote: "This is a place where ideas turn into reality. The leadership truly listens.",
-    name: "Ananya V.",
+    name: "Akhil.",
     title: "Product Manager"
   }
 ];
@@ -32,7 +32,7 @@ const Testimonials = () => {
             Hear from the people who make FinxBridge an amazing place to work
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="bg-white hover:shadow-lg transition-shadow duration-300">
