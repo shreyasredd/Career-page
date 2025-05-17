@@ -2,10 +2,10 @@ import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 const benefitsList = [
-  // {
-  //   title: "Comprehensive Health Coverage",
-  //   description: "Medical, dental, and vision plans for you and your family"
-  // },
+  {
+    title: "Comprehensive Health Coverage",
+    description: "Medical, dental, and vision plans"
+  },
   {
     title: "Flexible Work Environment",
     description: "Hybrid and remote work options"
