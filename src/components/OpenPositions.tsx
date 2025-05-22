@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const categories = [
   "All",
@@ -37,15 +37,26 @@ const jobOpenings = [
 
 const OpenPositions = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const sectionRef = useScrollAnimation<HTMLElement>({ threshold: 0.1 });
+  const headerRef = useScrollAnimation<HTMLDivElement>({ delay: 200 });
+  const tabsRef = useScrollAnimation<HTMLDivElement>({ delay: 400 });
+  const jobRefs = jobOpenings.map((_, index) => 
+    useScrollAnimation<HTMLDivElement>({ 
+      delay: 600 + (index * 200),
+      direction: 'up',
+      distance: 30
+    })
+  );
+  const ctaRef = useScrollAnimation<HTMLDivElement>({ delay: 1200 });
 
   const filteredJobs = selectedCategory === "All"
     ? jobOpenings
     : jobOpenings.filter(job => job.category === selectedCategory);
 
   return (
-    <section id="open-positions" className="py-16 bg-white section-fade">
+    <section ref={sectionRef} id="open-positions" className="py-16 bg-white section-fade">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div ref={headerRef} className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary mb-4">
             🚀 We're Hiring — Join Our Team
           </h2>
@@ -55,7 +66,7 @@ const OpenPositions = () => {
           </p>
         </div>
 
-        <div className="mb-8 overflow-x-auto">
+        <div ref={tabsRef} className="mb-8 overflow-x-auto">
           <Tabs defaultValue="All" className="max-w-3xl mx-auto">
             <TabsList className="flex flex-wrap justify-center mb-8 bg-supporting-light p-1">
               {categories.map((category) => (
@@ -73,7 +84,11 @@ const OpenPositions = () => {
             <TabsContent value={selectedCategory}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredJobs.map((job, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+                  <Card 
+                    key={index} 
+                    ref={jobRefs[index]}
+                    className="hover:shadow-lg transition-shadow duration-300"
+                  >
                     <CardContent className="p-6">
                       <div className="mb-4 flex justify-between items-start">
                         <h3 className="text-xl font-bold text-primary">{job.title}</h3>
@@ -100,7 +115,7 @@ const OpenPositions = () => {
           </Tabs>
         </div>
 
-        <div className="mt-12 bg-supporting-light rounded-lg p-8 text-center max-w-2xl mx-auto">
+        <div ref={ctaRef} className="mt-12 bg-supporting-light rounded-lg p-8 text-center max-w-2xl mx-auto">
           <h3 className="text-2xl font-bold text-primary mb-4">
             💡 Didn't Find the Role You're Looking For?
           </h3>

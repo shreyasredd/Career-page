@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const activities = [
   {
@@ -32,10 +32,21 @@ const activities = [
 ];
 
 const Activities = () => {
+  const sectionRef = useScrollAnimation<HTMLElement>({ threshold: 0.1 });
+  const headerRef = useScrollAnimation<HTMLDivElement>({ delay: 200 });
+  const activityRefs = activities.map((_, index) => 
+    useScrollAnimation<HTMLDivElement>({ 
+      delay: 300 + (index * 150),
+      direction: 'up',
+      distance: 40
+    })
+  );
+  const buttonRef = useScrollAnimation<HTMLDivElement>({ delay: 1000 });
+
   return (
-    <section className="py-16 bg-white section-fade">
+    <section ref={sectionRef} className="py-16 bg-white section-fade">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div ref={headerRef} className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary mb-4">
             🎉 Life at FinxBridge — Moments We Cherish
           </h2>
@@ -48,6 +59,7 @@ const Activities = () => {
           {activities.map((activity, index) => (
             <Card 
               key={index} 
+              ref={activityRefs[index]}
               className="hover:shadow-lg transition-shadow duration-300 overflow-hidden border-t-4 border-primary"
             >
               <CardContent className="p-6">
@@ -59,7 +71,7 @@ const Activities = () => {
           ))}
         </div>
         
-        <div className="mt-12 text-center">
+        <div ref={buttonRef} className="mt-12 text-center">
           <Button 
             className="bg-secondary hover:bg-primary text-white"
             onClick={() => document.getElementById('testimonials')?.scrollIntoView({behavior: 'smooth'})}

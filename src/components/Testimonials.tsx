@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Card, CardContent } from './ui/card';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const testimonials = [
   {
@@ -21,10 +21,20 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const sectionRef = useScrollAnimation<HTMLElement>({ threshold: 0.1 });
+  const headerRef = useScrollAnimation<HTMLDivElement>({ delay: 200 });
+  const testimonialRefs = testimonials.map((_, index) => 
+    useScrollAnimation<HTMLDivElement>({ 
+      delay: 400 + (index * 200),
+      direction: index % 2 === 0 ? 'left' : 'right',
+      distance: 30
+    })
+  );
+
   return (
-    <section id="testimonials" className="py-16 bg-supporting-light section-fade">
+    <section ref={sectionRef} id="testimonials" className="py-16 bg-supporting-light section-fade">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div ref={headerRef} className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary mb-4">
             💬 Employee Testimonials
           </h2>
@@ -35,7 +45,11 @@ const Testimonials = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="bg-white hover:shadow-lg transition-shadow duration-300">
+            <Card 
+              key={index} 
+              ref={testimonialRefs[index]}
+              className="bg-white hover:shadow-lg transition-shadow duration-300"
+            >
               <CardContent className="p-6">
                 <div className="text-4xl text-accent mb-4">"</div>
                 <p className="text-secondary-dark mb-4 italic">

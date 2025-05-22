@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 // Image URLs for the culture section
 const cultureImages = [
@@ -17,11 +17,21 @@ const cultureValues = [
 ];
 
 const Culture = () => {
+  const sectionRef = useScrollAnimation<HTMLElement>({ threshold: 0.1 });
+  const contentRef = useScrollAnimation<HTMLDivElement>({ delay: 200, direction: 'left' });
+  const imageRefs = cultureImages.map((_, index) => 
+    useScrollAnimation<HTMLDivElement>({ 
+      delay: 400 + (index * 150),
+      direction: 'right',
+      distance: 30
+    })
+  );
+
   return (
-    <section id="culture" className="py-16 bg-supporting-light section-fade">
+    <section ref={sectionRef} id="culture" className="py-16 bg-supporting-light section-fade">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center gap-10">
-          <div className="md:w-1/2">
+          <div ref={contentRef} className="md:w-1/2">
             <h2 className="text-3xl font-bold text-primary mb-4">
               🌟 Our Culture — Where People Thrive
             </h2>
@@ -53,7 +63,11 @@ const Culture = () => {
           
           <div className="md:w-1/2 grid grid-cols-2 gap-4">
             {cultureImages.map((img, index) => (
-              <div key={index} className="overflow-hidden rounded-lg shadow-md">
+              <div 
+                key={index} 
+                ref={imageRefs[index]}
+                className="overflow-hidden rounded-lg shadow-md"
+              >
                 <img 
                   src={img} 
                   alt={`Company culture ${index + 1}`} 
